@@ -54,8 +54,8 @@ class FontHeader {
         self.offset = []
         self.length = []
 
-        for i in 0..<self.numTables {
-            let tagIndex = 12 + Int(i) * 16
+        for i: UInt16 in 0..<self.numTables {
+            let tagIndex: Int = 12 + Int(i) * 16
             self.tag.append(rawData.subdata(in: tagIndex..<tagIndex + 4).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
             self.checkSum.append(rawData.subdata(in: tagIndex + 4..<tagIndex + 8).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
             self.offset.append(rawData.subdata(in: tagIndex + 8..<tagIndex + 12).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
