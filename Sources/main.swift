@@ -2,7 +2,7 @@ import Foundation
 
 let filePath: String = "ComicNeue-Regular.ttf"
 
-func getRawDara(filePath: String) throws -> Data {
+func getRawData(filePath: String) throws -> Data {
     let fileURL: URL = URL(fileURLWithPath: filePath)
     let rawData: Data = try Data(contentsOf: fileURL)
     return rawData
