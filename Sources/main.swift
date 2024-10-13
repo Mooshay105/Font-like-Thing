@@ -13,3 +13,4 @@ for i: UInt16 in 0..<fontHeader.getNumTables() {
     
     print("Tag: \(FileIO().convertUInt32ToASCII(value: tag)) Location: \(offset)")
 }
+print("Glyf Offset: \(fontHeader.getGlyfOffset())")

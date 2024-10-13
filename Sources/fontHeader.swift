@@ -25,6 +25,7 @@ class FontHeader {
     var checkSum: [UInt32]
     var offset: [UInt32]
     var length: [UInt32]
+    var glyfOffset: UInt32
 
     func getScalerType() -> UInt32 { return self.scalerType }
     func getNumTables() -> UInt16 { return self.numTables }
@@ -35,6 +36,8 @@ class FontHeader {
     func getCheckSum(id i: Int) -> UInt32 { return self.checkSum[i] }
     func getOffset(id i: Int) -> UInt32 { return self.offset[i] }
     func getLength(id i: Int) -> UInt32 { return self.length[i] }
+    // May Return `0` if `Glyf Offset` is not found.
+    func getGlyfOffset() -> UInt32 { return self.glyfOffset }
 
     init(rawData: Data) {
         self.scalerType = rawData.subdata(in: 0..<4).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian
@@ -46,13 +49,24 @@ class FontHeader {
         self.checkSum = []
         self.offset = []
         self.length = []
-
+        self.glyfOffset = 0
+        // Get the table data.
         for i: UInt16 in 0..<self.numTables {
             let tagIndex: Int = 12 + Int(i) * 16
             self.tag.append(rawData.subdata(in: tagIndex..<tagIndex + 4).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
             self.checkSum.append(rawData.subdata(in: tagIndex + 4..<tagIndex + 8).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
             self.offset.append(rawData.subdata(in: tagIndex + 8..<tagIndex + 12).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
             self.length.append(rawData.subdata(in: tagIndex + 12..<tagIndex + 16).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
+        }
+        // Get the `Glyf Offset`.
+        for i: UInt16 in 0..<self.numTables {
+            if self.tag[Int(i)] == 0x676C7966 {
+                self.glyfOffset = self.offset[Int(i)]
+            }
+        }
+        // Check if `Glyf Offset` is 0.
+        if self.glyfOffset == 0 {
+            print("[ERROR]: Glyf Offset not found! Value is 0.")
         }
     }
 }
