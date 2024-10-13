@@ -45,6 +45,7 @@ class FontHeader {
     var offset: [UInt32]
     var length: [UInt32]
     var glyfOffset: UInt32
+    var endBlock2Position: UInt32
 
     func getScalerType() -> UInt32 { return self.scalerType }
     func getNumTables() -> UInt16 { return self.numTables }
@@ -55,8 +56,11 @@ class FontHeader {
     func getCheckSum(id i: Int) -> UInt32 { return self.checkSum[i] }
     func getOffset(id i: Int) -> UInt32 { return self.offset[i] }
     func getLength(id i: Int) -> UInt32 { return self.length[i] }
-    // May Return `0` if `Glyf Offset` is not found.
+    // WARN: May Return `0` if `Glyf Offset` is not found.
+    // NOTE: Returns The Value WITH The Block 1&2 Sizes Added.
     func getGlyfOffset() -> UInt32 { return self.glyfOffset }
+    // WARN: May Return `0` error occors
+    func getEndBlock2Position() -> UInt32 { return self.endBlock2Position }
 
     init(rawData: Data) {
         self.scalerType = rawData.subdata(in: 0..<4).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian
@@ -69,6 +73,7 @@ class FontHeader {
         self.offset = []
         self.length = []
         self.glyfOffset = 0
+        self.endBlock2Position = 0
         // Get the table data.
         for i: UInt16 in 0..<self.numTables {
             let tagIndex: Int = 12 + Int(i) * 16
@@ -76,11 +81,16 @@ class FontHeader {
             self.checkSum.append(rawData.subdata(in: tagIndex + 4..<tagIndex + 8).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
             self.offset.append(rawData.subdata(in: tagIndex + 8..<tagIndex + 12).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
             self.length.append(rawData.subdata(in: tagIndex + 12..<tagIndex + 16).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
+
+            // Only run on last iteration.
+            if i == self.numTables - 1 {
+                self.endBlock2Position = UInt32(tagIndex + 16)
+            }
         }
         // Get the `Glyf Offset`.
         for i: UInt16 in 0..<self.numTables {
             if self.tag[Int(i)] == 0x676C7966 {
-                self.glyfOffset = self.offset[Int(i)]
+                self.glyfOffset = self.offset[Int(i)] + self.endBlock2Position
             }
         }
         // Check if `Glyf Offset` is 0.
