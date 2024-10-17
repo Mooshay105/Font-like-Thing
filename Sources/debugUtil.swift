@@ -15,13 +15,7 @@ class debug {
         }
 
         print("Number Of Tables: \(fontHeader.getNumTables())")
-
-        do {
-            print("'glyf' Table Location: \(try fontHeader.getGlyfOffset())")
-        } catch {
-            print("Error: \(error)")
-        }
-
+        print("'glyf' Table Location: \( fontHeader.getGlyfOffset())")
         print("End of Header Location: \(fontHeader.getEndOfHeaderLocation())")
 
         do {

@@ -35,9 +35,6 @@ import Foundation
 */
 
 class FontHeader {
-    enum FontHeaderError: Error {
-        case GlyfTableNotFound
-    }
     var scalerType: UInt32
     var numTables: UInt16
     var searchRange: UInt16
@@ -59,15 +56,8 @@ class FontHeader {
     func getCheckSum(id i: Int) -> UInt32 { return self.checkSum[i] }
     func getOffset(id i: Int) -> UInt32 { return self.offset[i] }
     func getLength(id i: Int) -> UInt32 { return self.length[i] }
-    // WARN: May Throw `FontHeaderError.GlyfTableNotFound` if `Glyf Offset` is not found.
-    // NOTE: Returns The Value WITH The Block 1&2 Sizes Added.
-    func getGlyfOffset() throws -> UInt32 {
-        if self.glyfOffset == 0 {
-            throw FontHeaderError.GlyfTableNotFound
-        }
-
-        return self.glyfOffset
-    }
+    // WARN: May Return `0` if `Glyf Offset` is not found.
+    func getGlyfOffset() -> UInt32 { return self.glyfOffset }
     func getEndOfHeaderLocation() -> UInt32 { return self.endOfHeaderLocation }
 
     init(rawData: Data) {
@@ -99,7 +89,7 @@ class FontHeader {
         // Get the `Glyf Offset`.
         for i: UInt16 in 0..<self.numTables {
             if self.tag[Int(i)] == 0x676C7966 {
-                self.glyfOffset = self.offset[Int(i)] + self.endOfHeaderLocation
+                self.glyfOffset = self.offset[Int(i)]
             }
         }
     }
