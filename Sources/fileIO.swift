@@ -71,4 +71,30 @@ class FileIO {
         return rawData.map { String(format: "%02x", $0) }.joined(separator: " ")
     }
 
+    /*
+
+    Takes in rawData and a loaction and returns the UInt16 at the location.
+    In, rawData: Data
+    In, location: UInt32
+    Out: UInt16
+
+    */
+
+    func getUInt16(rawData: Data, at location: UInt32) -> UInt16 {
+        return rawData.subdata(in: Int(location)..<Int(location) + 2).withUnsafeBytes { $0.load(as: UInt16.self) }.bigEndian
+    }
+
+    /*
+
+    CREDIT: https://github.com/SebLague/Text-Rendering/blob/main/Assets/Scripts/SebText/Loader/FontParser.cs#L549
+    Takes in a UInt8 and returns `1` if the bit at the index is set.
+    In, flag: UInt8
+    In, bitIndex: Int
+    Out: Bool
+
+    */
+
+    func isFlagBitSet(flag: UInt8, bitIndex: Int) -> Bool {
+        return ((flag >> bitIndex) & 1) == 1;
+    }
 }
