@@ -1,4 +1,8 @@
 import Foundation
 
-let debugUtil: debug = debug()
-try debugUtil.debug()
+let debugMode: Bool = true
+
+if debugMode {
+    let debugUtil: debug = debug()
+    try debugUtil.debug()
+}
