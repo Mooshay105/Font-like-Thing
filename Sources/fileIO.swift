@@ -1,6 +1,10 @@
 import Foundation
 
 class FileIO {
+    enum FileIOError: Error {
+        case invalidLocation
+    }
+
     /*
 
     Takes in a file path and returns the raw data of the file.
@@ -8,7 +12,7 @@ class FileIO {
     Out: Data
 
     */
-    func getRawData(_ filePath: String) throws -> Data {
+    func getRawData(filePath: String) throws -> Data {
         let fileURL: URL = URL(fileURLWithPath: filePath)
         let rawData: Data = try Data(contentsOf: fileURL)
         return rawData
@@ -35,4 +39,36 @@ class FileIO {
         let bytes: [UnsafeRawBufferPointer.Element] = withUnsafeBytes(of: value.bigEndian, Array.init)
         return String(bytes: bytes, encoding: .ascii) ?? ""
     }
+
+    /*
+
+    Takes in data and a location and returns the byte at that location.
+    In, data: Data
+    In, location: UInt32
+    Out: Data?
+
+    NOTE: Will return nil if the location is out of bounds.
+
+    */
+
+    func getByte(data: Data, at location: UInt32) throws -> Data? {
+        guard location < data.count else {
+            throw FileIOError.invalidLocation
+        }
+    
+        return Data([data[Int(location)]])
+    }
+
+    /*
+
+    Takes in a Data object and returns the hex string representation of the data.
+    In: Data
+    Out: String
+
+    */
+
+    func getHexString(rawData: Data) -> String {
+        return rawData.map { String(format: "%02x", $0) }.joined(separator: " ")
+    }
+
 }
