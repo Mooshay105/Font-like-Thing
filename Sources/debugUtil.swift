@@ -15,11 +15,11 @@ class debug {
         }
 
         print("Number Of Tables: \(fontHeader.getNumTables())")
-        print("'glyf' Table Location: \( fontHeader.getGlyfOffset())")
+        print("'glyf' Table Location: \( fontHeader.findTableOffset(forTag: "glyf"))")
         print("End of Header Location: \(fontHeader.getEndOfHeaderLocation())")
 
         do {
-            let glyfData: Data = try fileIO.getByte(data: DATA, at: fontHeader.getGlyfOffset())!
+            let glyfData: Data = try fileIO.getByte(data: DATA, at: fontHeader.findTableOffset(forTag: "glyf"))!
             print("glyf data: \(fileIO.getHexString(rawData: glyfData))")
         } catch {
             print("Error: \(error)")

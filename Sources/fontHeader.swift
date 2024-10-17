@@ -44,7 +44,6 @@ class FontHeader {
     var checkSum: [UInt32]
     var offset: [UInt32]
     var length: [UInt32]
-    var glyfOffset: UInt32
     var endOfHeaderLocation: UInt32
 
     func getScalerType() -> UInt32 { return self.scalerType }
@@ -56,9 +55,21 @@ class FontHeader {
     func getCheckSum(id i: Int) -> UInt32 { return self.checkSum[i] }
     func getOffset(id i: Int) -> UInt32 { return self.offset[i] }
     func getLength(id i: Int) -> UInt32 { return self.length[i] }
-    // WARN: May Return `0` if `Glyf Offset` is not found.
-    func getGlyfOffset() -> UInt32 { return self.glyfOffset }
     func getEndOfHeaderLocation() -> UInt32 { return self.endOfHeaderLocation }
+
+    func findTableOffset(forTag tableTag: String) -> UInt32 {
+        var tagValue: UInt32 = 0
+        for character in tableTag.utf8 {
+            tagValue = (tagValue << 8) | UInt32(character)
+        }
+
+        for i: UInt16 in 0..<self.numTables {
+            if self.tag[Int(i)] == tagValue {
+                return self.offset[Int(i)]
+            }
+        }
+        return 0
+    }
 
     init(rawData: Data) {
         self.scalerType = rawData.subdata(in: 0..<4).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian
@@ -70,8 +81,6 @@ class FontHeader {
         self.checkSum = []
         self.offset = []
         self.length = []
-        self.glyfOffset = 0
-        // NOTE: The `End Of Header Location` will allways be set and if it is not there are bigger issues, we just need to set it to make the compiler happy.
         self.endOfHeaderLocation = 0
         // Get the table data.
         for i: UInt16 in 0..<self.numTables {
@@ -84,12 +93,6 @@ class FontHeader {
             // Only run on last iteration.
             if i == self.numTables - 1 {
                 self.endOfHeaderLocation = UInt32(tagIndex + 16)
-            }
-        }
-        // Get the `Glyf Offset`.
-        for i: UInt16 in 0..<self.numTables {
-            if self.tag[Int(i)] == 0x676C7966 {
-                self.glyfOffset = self.offset[Int(i)]
             }
         }
     }
