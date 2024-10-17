@@ -13,7 +13,13 @@ for i: UInt16 in 0..<fontHeader.getNumTables() {
 }
 
 print("Number Of Tables: \(fontHeader.getNumTables())")
-print("'glyf' Table Location: \(fontHeader.getGlyfOffset())")
+
+do {
+    print("'glyf' Table Location: \(try fontHeader.getGlyfOffset())")
+} catch {
+    print("Error: \(error)")
+}
+
 print("End of Header Location: \(fontHeader.getEndOfHeaderLocation())")
 
 do {

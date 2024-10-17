@@ -35,6 +35,9 @@ import Foundation
 */
 
 class FontHeader {
+    enum FontHeaderError: Error {
+        case GlyfTableNotFound
+    }
     var scalerType: UInt32
     var numTables: UInt16
     var searchRange: UInt16
@@ -56,10 +59,15 @@ class FontHeader {
     func getCheckSum(id i: Int) -> UInt32 { return self.checkSum[i] }
     func getOffset(id i: Int) -> UInt32 { return self.offset[i] }
     func getLength(id i: Int) -> UInt32 { return self.length[i] }
-    // WARN: May Return `0` if `Glyf Offset` is not found.
+    // WARN: May Throw `FontHeaderError.GlyfTableNotFound` if `Glyf Offset` is not found.
     // NOTE: Returns The Value WITH The Block 1&2 Sizes Added.
-    func getGlyfOffset() -> UInt32 { return self.glyfOffset }
-    // WARN: May Return `0` error occors
+    func getGlyfOffset() throws -> UInt32 {
+        if self.glyfOffset == 0 {
+            throw FontHeaderError.GlyfTableNotFound
+        }
+
+        return self.glyfOffset
+    }
     func getEndOfHeaderLocation() -> UInt32 { return self.endOfHeaderLocation }
 
     init(rawData: Data) {
@@ -73,6 +81,7 @@ class FontHeader {
         self.offset = []
         self.length = []
         self.glyfOffset = 0
+        // NOTE: The `End Of Header Location` will allways be set and if it is not there are bigger issues, we just need to set it to make the compiler happy.
         self.endOfHeaderLocation = 0
         // Get the table data.
         for i: UInt16 in 0..<self.numTables {
@@ -92,10 +101,6 @@ class FontHeader {
             if self.tag[Int(i)] == 0x676C7966 {
                 self.glyfOffset = self.offset[Int(i)] + self.endOfHeaderLocation
             }
-        }
-        // Check if `Glyf Offset` is 0.
-        if self.glyfOffset == 0 {
-            print("[ERROR]: Glyf Offset not found! Value is 0.")
         }
     }
 }

@@ -47,7 +47,7 @@ class FileIO {
     In, location: UInt32
     Out: Data?
 
-    NOTE: Will return nil if the location is out of bounds.
+    WARN: Will throw `FileIOError.invalidLocation` if the location is out of bounds.
 
     */
 
