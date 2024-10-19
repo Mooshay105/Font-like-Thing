@@ -12,14 +12,6 @@ import Foundation
      - 'name' 	naming
      - 'post' 	PostScript
     
-    Optional Tables:
-     - 'cvt ' 	control value
-     - 'fpgm' 	font program
-     - 'hdmx' 	horizontal device metrics
-     - 'kern' 	kerning
-     - 'OS/2' 	OS/2
-     - 'prep' 	control value program
-    
     Block 1:
     uint32 	scaler type 	A tag to indicate the OFA scaler to be used to rasterize this font; see the note on the scaler type below for more information.
     uint16 	numTables 	    number of tables
