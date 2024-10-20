@@ -33,8 +33,7 @@ class debug {
         print("\u{001B}[0;32m✔\u{001B}[0;37m  'glyf' Table Location: \( fontHeader.findTableOffset(forTag: "glyf"))")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  End of Header Location: \(fontHeader.getEndOfHeaderLocation())")
 
-        // CMap Table Stuff
-
+        // cmap Table Stuff
         print("\u{001B}[0;32m✔\u{001B}[0;37m  cmap Table Version: \(cmapTable.getVersion())")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  cmap Table Number Of Tables: \(cmapTable.getNumTables())")
         for i: UInt16 in 0..<cmapTable.getNumTables() {
@@ -52,23 +51,25 @@ class debug {
             print("\u{001B}[0;32m✔\u{001B}[0;37m  cmap Table Unicode Offset: \(cmapTable.getOffset(id: Int(cmapTable.getUnicodeIndex(id: Int(i)))))")
         }
         print("\u{001B}[0;31m✗\u{001B}[0;37m  cmap Table Unicode To Glyph Index: \(cmapTable.unicodeToGlyphIndex(unicode: 0x0042))")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Magic Number: 0x\(fileIO.decimalToHex(decimal: Int(headTable.getMagicNumber())))")
+
+        // head Table Stuff
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Magic Number: 0x\(fileIO.decimalToHex(decimal: Int(headTable.getMagicNumber())))")
         let intFlags: [Int] = fileIO.bitsToArray(value: headTable.getFlags())
         let boolFlags: [Bool] = fileIO.bitsToArray(value: headTable.getFlags())
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Bool Flags: \(boolFlags)")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Int Flags: \(intFlags)")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Units Per Em: \(headTable.getUnitsPerEm())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Created: \(headTable.getCreated())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Modified: \(headTable.getModified())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  XMin: \(headTable.getXMin())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  YMin: \(headTable.getYMin())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  XMax: \(headTable.getXMax())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  YMax: \(headTable.getYMax())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Mac Style: \(headTable.getMacStyle())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Lowest Rec PPEM: \(headTable.getLowestRecPPEM())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Font Direction Hint: \(headTable.getFontDirectionHint())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Index To Loc Format: \(headTable.getIndexToLocFormat())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m  Glyph Data Format: \(headTable.getGlyphDataFormat())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Bool Flags: \(boolFlags)")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Int Flags: \(intFlags)")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Units Per Em: \(headTable.getUnitsPerEm())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Created: \(headTable.getCreated())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Modified: \(headTable.getModified())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table XMin: \(headTable.getXMin())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table YMin: \(headTable.getYMin())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table XMax: \(headTable.getXMax())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table YMax: \(headTable.getYMax())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Mac Style: \(headTable.getMacStyle())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Lowest Rec PPEM: \(headTable.getLowestRecPPEM())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Font Direction Hint: \(headTable.getFontDirectionHint())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Index To Loc Format: \(headTable.getIndexToLocFormat())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Glyph Data Format: \(headTable.getGlyphDataFormat())")
 
         // hhea Table Stuff
         print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Ascent: \(hheaTable.getAscent())")
