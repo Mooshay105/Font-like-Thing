@@ -17,6 +17,7 @@ class debug {
         let maxpTable: maxpTable = maxpTable(rawData: DATA)
         let hheaTable: hheaTable = hheaTable(rawData: DATA)
         let postTable: postTable = postTable(rawData: DATA)
+        let locaTable: locaTable = locaTable(rawData: DATA)
 
         print("\u{001B}[0;32m✔\u{001B}[0;37m  Font: \(filePath)")
 
@@ -111,15 +112,14 @@ class debug {
         print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Max Mem Type 1: \(postTable.getMaxMemType1())")
 
         // Loca Table Stuff
-        let locaTable: locaTable = locaTable(rawData: DATA)
         print("\u{001B}[0;33m✔\u{001B}[0;37m  loca Table Index To Loc Format: \(locaTable.indexToLocFormat)")
         if headTable.getIndexToLocFormat() == 0 {
             for i: UInt16 in 0..<maxpTable.getNumGlyphs() {
-                print("\u{001B}[0;33m✔\u{001B}[0;37m  loca Table Offset: \(locaTable.getOffsetShort(id: Int(i)))")
+                print("\u{001B}[0;32m✔\u{001B}[0;37m  loca Table Offset: \(locaTable.getOffsetShort(id: Int(i)))")
             }
         } else {
             for i: UInt16 in 0..<maxpTable.getNumGlyphs() {
-                print("\u{001B}[0;33m✔\u{001B}[0;37m  loca Table Offset: \(locaTable.getOffsetLong(id: Int(i)))")
+                print("\u{001B}[0;32m✔\u{001B}[0;37m  loca Table Offset: \(locaTable.getOffsetLong(id: Int(i)))")
             }
         }
     }
