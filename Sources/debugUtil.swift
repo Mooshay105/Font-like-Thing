@@ -18,7 +18,7 @@ class debug {
         let hheaTable: hheaTable = hheaTable(rawData: DATA)
         let postTable: postTable = postTable(rawData: DATA)
 
-        print("   Font: \(filePath)")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  Font: \(filePath)")
 
         // Header Stuff
         for i: UInt16 in 0..<fontHeader.getNumTables() {
