@@ -50,7 +50,7 @@ class debug {
             print("\u{001B}[0;32m✔\u{001B}[0;37m  cmap Table Unicode Index: \(cmapTable.getUnicodeIndex(id: Int(i)))")
             print("\u{001B}[0;32m✔\u{001B}[0;37m  cmap Table Unicode Offset: \(cmapTable.getOffset(id: Int(cmapTable.getUnicodeIndex(id: Int(i)))))")
         }
-        print("   cmap Table Unicode To Glyph Index: \(cmapTable.unicodeToGlyphIndex(unicode: 0x0042))")
+        print("\u{001B}[0;31m✗\u{001B}[0;37m  cmap Table Unicode To Glyph Index: \(cmapTable.unicodeToGlyphIndex(unicode: 0x0042))")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  Magic Number: 0x\(fileIO.decimalToHex(decimal: Int(headTable.getMagicNumber())))")
         let intFlags: [Int] = fileIO.bitsToArray(value: headTable.getFlags())
         let boolFlags: [Bool] = fileIO.bitsToArray(value: headTable.getFlags())
@@ -109,5 +109,18 @@ class debug {
         print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Max Mem Type 42: \(postTable.getMaxMemType42())")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Min Mem Type 1: \(postTable.getMinMemType1())")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Max Mem Type 1: \(postTable.getMaxMemType1())")
+
+        // Loca Table Stuff
+        let locaTable: locaTable = locaTable(rawData: DATA)
+        print("\u{001B}[0;33m✔\u{001B}[0;37m  loca Table Index To Loc Format: \(locaTable.indexToLocFormat)")
+        if headTable.getIndexToLocFormat() == 0 {
+            for i: UInt16 in 0..<maxpTable.getNumGlyphs() {
+                print("\u{001B}[0;33m✔\u{001B}[0;37m  loca Table Offset: \(locaTable.getOffsetShort(id: Int(i)))")
+            }
+        } else {
+            for i: UInt16 in 0..<maxpTable.getNumGlyphs() {
+                print("\u{001B}[0;33m✔\u{001B}[0;37m  loca Table Offset: \(locaTable.getOffsetLong(id: Int(i)))")
+            }
+        }
     }
 }
