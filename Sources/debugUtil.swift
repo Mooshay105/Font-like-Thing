@@ -9,6 +9,8 @@ class debug {
         let fontHeader: FontHeader = FontHeader(rawData: DATA)
         let cmapTable: cmapTable = cmapTable(rawData: DATA)
         let headTable: HeadTable = HeadTable(rawData: DATA)
+        let maxpTable: maxpTable = maxpTable(rawData: DATA)
+        let hheaTable: hheaTable = hheaTable(rawData: DATA)
         
         // Header Stuff
 
@@ -59,5 +61,35 @@ class debug {
         print("\u{001B}[0;32m✔\u{001B}[0;37m  Font Direction Hint: \(headTable.getFontDirectionHint())")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  Index To Loc Format: \(headTable.getIndexToLocFormat())")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  Glyph Data Format: \(headTable.getGlyphDataFormat())")
+
+        // hhea Table Stuff
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Ascent: \(hheaTable.getAscent())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Descent: \(hheaTable.getDescent())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Line Gap: \(hheaTable.getLineGap())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Advance Width Max: \(hheaTable.getAdvanceWidthMax())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Min Left Side Bearing: \(hheaTable.getMinLeftSideBearing())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Min Right Side Bearing: \(hheaTable.getMinRightSideBearing())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table XMax Extent: \(hheaTable.getXMaxExtent())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Caret Slope Rise: \(hheaTable.getCaretSlopeRise())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Caret Slope Run: \(hheaTable.getCaretSlopeRun())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Caret Offset: \(hheaTable.getCaretOffset())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Metric Data Format: \(hheaTable.getMetricDataFormat())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  hhea Table Number Of HMetrics: \(hheaTable.getNumberOfHMetrics())")
+
+        // maxp Table Stuff
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Num Glyphs: \(maxpTable.getNumGlyphs())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Points: \(maxpTable.getMaxPoints())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Contours: \(maxpTable.getMaxContours())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Composite Points: \(maxpTable.getMaxCompositePoints())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Composite Contours: \(maxpTable.getMaxCompositeContours())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Zones: \(maxpTable.getMaxZones())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Twilight Points: \(maxpTable.getMaxTwilightPoints())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Storage: \(maxpTable.getMaxStorage())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Function Defs: \(maxpTable.getMaxFunctionDefs())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Instruction Defs: \(maxpTable.getMaxInstructionDefs())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Stack Elements: \(maxpTable.getMaxStackElements())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Size Of Instructions: \(maxpTable.getMaxSizeOfInstructions())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Component Elements: \(maxpTable.getMaxComponentElements())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Component Depth: \(maxpTable.getMaxComponentDepth())")
     }
 }
