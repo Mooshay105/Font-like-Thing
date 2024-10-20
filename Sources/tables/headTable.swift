@@ -1,6 +1,6 @@
 import Foundation
 
-class HeadTable {
+class headTable {
     // version, fontRevision & checkSumAdjustment are not accessible.
     var magicNumber: UInt32
     var flags: UInt16

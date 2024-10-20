@@ -8,7 +8,7 @@ class debug {
         let DATA: Data = try fileIO.getRawData(filePath: filePath)
         let fontHeader: FontHeader = FontHeader(rawData: DATA)
         let cmapTable: cmapTable = cmapTable(rawData: DATA)
-        let headTable: HeadTable = HeadTable(rawData: DATA)
+        let headTable: headTable = headTable(rawData: DATA)
         let maxpTable: maxpTable = maxpTable(rawData: DATA)
         let hheaTable: hheaTable = hheaTable(rawData: DATA)
         
