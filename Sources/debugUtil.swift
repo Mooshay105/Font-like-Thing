@@ -2,6 +2,11 @@ import Foundation
 
 class debug {
     func debug() throws {
+        // let filePath: String = "ComicNeue-Bold.ttf"
+        // let filePath: String = "ComicNeue-BoldItalic.ttf"
+        // let filePath: String = "ComicNeue-Italic.ttf"
+        // let filePath: String = "ComicNeue-Light.ttf"
+        // let filePath: String = "ComicNeue-LightItalic.ttf"
         // let filePath: String = "ComicNeue-Regular.ttf"
         let filePath: String = "JetBrainsMono-Bold.ttf"
         let fileIO: FileIO = FileIO()
@@ -11,9 +16,11 @@ class debug {
         let headTable: headTable = headTable(rawData: DATA)
         let maxpTable: maxpTable = maxpTable(rawData: DATA)
         let hheaTable: hheaTable = hheaTable(rawData: DATA)
-        
-        // Header Stuff
+        let postTable: postTable = postTable(rawData: DATA)
 
+        print("   Font: \(filePath)")
+
+        // Header Stuff
         for i: UInt16 in 0..<fontHeader.getNumTables() {
             let tag: UInt32 = fontHeader.getTag(id: Int(i))
             let offset: UInt32 = fontHeader.getOffset(id: Int(i))
@@ -78,18 +85,29 @@ class debug {
 
         // maxp Table Stuff
         print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Num Glyphs: \(maxpTable.getNumGlyphs())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Points: \(maxpTable.getMaxPoints())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Contours: \(maxpTable.getMaxContours())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Composite Points: \(maxpTable.getMaxCompositePoints())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Composite Contours: \(maxpTable.getMaxCompositeContours())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Zones: \(maxpTable.getMaxZones())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Twilight Points: \(maxpTable.getMaxTwilightPoints())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Storage: \(maxpTable.getMaxStorage())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Function Defs: \(maxpTable.getMaxFunctionDefs())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Instruction Defs: \(maxpTable.getMaxInstructionDefs())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Stack Elements: \(maxpTable.getMaxStackElements())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Size Of Instructions: \(maxpTable.getMaxSizeOfInstructions())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Component Elements: \(maxpTable.getMaxComponentElements())")
-        print("\u{001B}[0;32m✔\u{001B}[0;37m   maxp Table Max Component Depth: \(maxpTable.getMaxComponentDepth())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Points: \(maxpTable.getMaxPoints())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Contours: \(maxpTable.getMaxContours())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Composite Points: \(maxpTable.getMaxCompositePoints())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Composite Contours: \(maxpTable.getMaxCompositeContours())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Zones: \(maxpTable.getMaxZones())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Twilight Points: \(maxpTable.getMaxTwilightPoints())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Storage: \(maxpTable.getMaxStorage())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Function Defs: \(maxpTable.getMaxFunctionDefs())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Instruction Defs: \(maxpTable.getMaxInstructionDefs())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Stack Elements: \(maxpTable.getMaxStackElements())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Size Of Instructions: \(maxpTable.getMaxSizeOfInstructions())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Component Elements: \(maxpTable.getMaxComponentElements())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  maxp Table Max Component Depth: \(maxpTable.getMaxComponentDepth())")
+
+        // Post Table Stuff
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Format: \(postTable.getFormat())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Italic Angle: \(postTable.getItalicAngle())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Underline Position: \(postTable.getUnderlinePosition())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Underline Thickness: \(postTable.getUnderlineThickness())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Is Fixed Pitch: \(postTable.getIsFixedPitch())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Min Mem Type 42: \(postTable.getMinMemType42())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Max Mem Type 42: \(postTable.getMaxMemType42())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Min Mem Type 1: \(postTable.getMinMemType1())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  post Table Max Mem Type 1: \(postTable.getMaxMemType1())")
     }
 }
