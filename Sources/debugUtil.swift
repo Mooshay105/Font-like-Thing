@@ -123,5 +123,22 @@ class debug {
                 print("\u{001B}[0;32m✔\u{001B}[0;37m  loca Table Offset: \(locaTable.getOffsetLong(id: Int(i)))")
             }
         }
+
+        // Name Table Stuff
+        let nameTable: nameTable = nameTable(rawData: DATA)
+        print(" ")
+        print(" ")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  name Table Format: \(nameTable.getFormat())")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  name Table Count: \(nameTable.getCount())")
+        print("\u{001B}[0;33m✔\u{001B}[0;37m  name Table String Offset: \(nameTable.getStringOffset())")
+        for i: UInt16 in 0..<nameTable.getCount() {
+            print(" ")
+            print("\u{001B}[0;32m✔\u{001B}[0;37m  name Table Platform ID: \(nameTable.getNameRecords()[Int(i)].platformID)")
+            print("\u{001B}[0;32m✔\u{001B}[0;37m  name Table Platform Specific ID: \(nameTable.getNameRecords()[Int(i)].platformSpecificID)")
+            print("\u{001B}[0;32m✔\u{001B}[0;37m  name Table Language ID: \(nameTable.getNameRecords()[Int(i)].languageID)")
+            print("\u{001B}[0;32m✔\u{001B}[0;37m  name Table Name ID: \(nameTable.getNameRecords()[Int(i)].nameID)")
+            print("\u{001B}[0;32m✔\u{001B}[0;37m  name Table Length: \(nameTable.getNameRecords()[Int(i)].length)")
+            print("\u{001B}[0;32m✔\u{001B}[0;37m  name Table Offset: \(nameTable.getNameRecords()[Int(i)].offset)")
+        }
     }
 }
