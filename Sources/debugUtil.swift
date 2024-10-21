@@ -146,6 +146,7 @@ class debug {
         print(" ")
         let glyfTable: glyfTable = glyfTable(rawData: DATA)
         let i: Int = 0
+        //for i: Int in 0..<glyfTable.getGlyfs().count {
         print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Number Of Glyphs: \(glyfTable.getGlyfs().count)")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Number Of Contours: \(glyfTable.getGlyfs()[i].numberOfContours)")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table X Min: \(glyfTable.getGlyfs()[i].xMin)")
@@ -161,5 +162,6 @@ class debug {
         }
         print("\u{001B}[0;33m?\u{001B}[0;37m  glyf Table X Coordinates: \(glyfTable.getGlyfs()[i].xCoordinates)")
         print("\u{001B}[0;33m?\u{001B}[0;37m  glyf Table Y Coordinates: \(glyfTable.getGlyfs()[i].yCoordinates)")
+        //}
     }
 }
