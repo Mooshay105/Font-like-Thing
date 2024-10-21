@@ -193,7 +193,7 @@ class FileIO {
     Out: [Bool] or [Int]
 
     */
-    func bitsToArray(value: UInt16) -> [Bool] {
+    func bitsToArrayUInt16(value: UInt16) -> [Bool] {
         var bitsArray: [Bool] = []
         for i: Int in (0..<16).reversed() {
             bitsArray.append((value >> i) & 1 == 1)
@@ -201,11 +201,35 @@ class FileIO {
         return bitsArray
     }
 
-    func bitsToArray(value: UInt16) -> [Int] {
+    func bitsToArrayUInt16(value: UInt16) -> [Int] {
         var bitsArray: [Int] = [Int](repeating: 0, count: 16)
 
         for i: Int in (0..<16).reversed() {
             bitsArray[i] = Int((value >> (15 - i)) & 1)
+        }
+
+        return bitsArray
+    }
+        /*
+
+    Takes in a UInt8 and returns an array of bits.
+    In, value: UInt8
+    Out: [Bool] or [Int]
+
+    */
+    func bitsToArrayUInt8(value: UInt8) -> [Bool] {
+        var bitsArray: [Bool] = []
+        for i: Int in (0..<8).reversed() {
+            bitsArray.append((value >> i) & 1 == 1)
+        }
+        return bitsArray
+    }
+
+    func bitsToArrayUInt8(value: UInt8) -> [Int] {
+        var bitsArray: [Int] = [Int](repeating: 0, count: 8)
+
+        for i: Int in (0..<8).reversed() {
+            bitsArray[i] = Int((value >> (7 - i)) & 1)
         }
 
         return bitsArray

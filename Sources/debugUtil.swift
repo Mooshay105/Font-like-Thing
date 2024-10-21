@@ -54,8 +54,8 @@ class debug {
 
         // head Table Stuff
         print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Magic Number: 0x\(fileIO.decimalToHex(decimal: Int(headTable.getMagicNumber())))")
-        let intFlags: [Int] = fileIO.bitsToArray(value: headTable.getFlags())
-        let boolFlags: [Bool] = fileIO.bitsToArray(value: headTable.getFlags())
+        let intFlags: [Int] = fileIO.bitsToArrayUInt16(value: headTable.getFlags())
+        let boolFlags: [Bool] = fileIO.bitsToArrayUInt16(value: headTable.getFlags())
         print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Bool Flags: \(boolFlags)")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Int Flags: \(intFlags)")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  head Table Units Per Em: \(headTable.getUnitsPerEm())")
@@ -153,9 +153,12 @@ class debug {
         print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table X Max: \(glyfTable.getGlyfs()[i].xMax)")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Y Max: \(glyfTable.getGlyfs()[i].yMax)")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table End Pts Of Contours: \(glyfTable.getGlyfs()[i].endPtsOfContours)")
-        print("\u{001B}[0;33m✔\u{001B}[0;37m  glyf Table Instruction Length: \(glyfTable.getGlyfs()[i].instructionLength)")
-        print("\u{001B}[0;33m?\u{001B}[0;37m  glyf Table Instructions: \(glyfTable.getGlyfs()[i].instructions)")
-        print("\u{001B}[0;36m?\u{001B}[0;37m  glyf Table Flags: \(glyfTable.getGlyfs()[i].flags)")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Instruction Length: \(glyfTable.getGlyfs()[i].instructionLength)")
+        print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Instructions: \(glyfTable.getGlyfs()[i].instructions)")
+        for j: Int in 0..<glyfTable.getGlyfs()[i].flags.count {
+            let glyfIntFlags: [Int] = fileIO.bitsToArrayUInt8(value: glyfTable.getGlyfs()[i].flags[j])
+            print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Flags: \(glyfIntFlags)")
+        }
         print("\u{001B}[0;33m?\u{001B}[0;37m  glyf Table X Coordinates: \(glyfTable.getGlyfs()[i].xCoordinates)")
         print("\u{001B}[0;33m?\u{001B}[0;37m  glyf Table Y Coordinates: \(glyfTable.getGlyfs()[i].yCoordinates)")
     }

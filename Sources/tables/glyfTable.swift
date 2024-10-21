@@ -30,6 +30,7 @@ class glyfTable {
 
         for i: UInt16 in 0..<numberOfGlyphs {
             var endPtsOfContoursEndPos: UInt32 = 0
+            var instructionEndPos: UInt32 = 0
             let glyphOffset: UInt32 = locaTable.getOffsetLong(id: Int(i))
             let numberOfContours: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset)
             if numberOfContours <= 0 {
@@ -49,8 +50,12 @@ class glyfTable {
             var instructions: [UInt8] = []
             for j: Int16 in 0..<Int16(instructionLength) {
                 instructions.append(fileIO.getUInt8(rawData: rawData, at: endPtsOfContoursEndPos + 2 + UInt32(j)*2))
+                instructionEndPos = endPtsOfContoursEndPos + 2 + UInt32(j)*2
             }
-            let flags: [UInt8] = []
+            var flags: [UInt8] = []
+            for j: Int16 in 0..<Int16(endPtsOfContours[endPtsOfContours.count - 1]+1) {
+                flags.append(fileIO.getUInt8(rawData: rawData, at: instructionEndPos + 2 + UInt32(j)*2))
+            }
             let xCoordinates: [Int] = []
             let yCoordinates: [Int] = []
 
