@@ -16,75 +16,34 @@ class glyfTable {
     }
 
     var glyfs: [Glyf]
-    var numberOfFlags: Int
-    var glyfTableOffset: UInt32
-
-    var glyphOffset: UInt32
 
     func getGlyfs() -> [Glyf] { return self.glyfs }
 
     init(rawData: Data) {
-        self.glyfs = []
         let fontHeader: FontHeader = FontHeader(rawData: rawData)
-        let fileIO: FileIO = FileIO()
-        self.glyfTableOffset = fontHeader.findTableOffset(forTag: "glyf")
-        
         let locaTable: locaTable = locaTable(rawData: rawData)
-        //let maxpTable: maxpTable = maxpTable(rawData: rawData)
-        self.glyphOffset = 0
-        self.numberOfFlags = 0
-        //for i: UInt16 in 0..<maxpTable.getNumGlyphs() {
+        let fileIO: FileIO = FileIO()
+        let glyfTableOffset: UInt32 = fontHeader.findTableOffset(forTag: "glyf")
+
+        self.glyfs = []
+
         for i: UInt16 in 0..<1 {
-            var numberOfContoursEndPos: UInt32 = 0
-            var instructionsEndPos: UInt32 = 0
-            var flagsEndPos: UInt32 = 0
-            var xCoordinatesEndPos: UInt32 = 0
-            /*if locaTable.indexToLocFormat == 0 {
-                self.glyphOffset = locaTable.getOffsetShort(id: Int(i))
-                if glyphOffset == locaTable.getOffsetShort(id: Int(i + 1)) {
-                    continue
-                }
-            } else {*/
-                self.glyphOffset = locaTable.getOffsetLong(id: Int(i))
-                if glyphOffset == locaTable.getOffsetLong(id: Int(i + 1)) {
-                    continue
-                }
-            /*}*/
-            
+            let glyphOffset: UInt32 = locaTable.getOffsetLong(id: Int(i))
+
             let numberOfContours: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset)
             let xMin: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 2)
             let yMin: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 4)
             let xMax: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 6)
             let yMax: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 8)
-            
             var endPtsOfContours: [UInt16] = []
             for j: Int16 in 0..<numberOfContours {
-                endPtsOfContours.append(fileIO.getUInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j)))
-                numberOfContoursEndPos = glyfTableOffset + glyphOffset + 10 + UInt32(j)
+                endPtsOfContours.append(fileIO.getUInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j)*2))
             }
-            let instructionLength: Int = Int(fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(numberOfContoursEndPos)))
-            var instructions: [UInt8] = []
-            for j: Int16 in 0..<Int16(instructionLength) {
-                instructions.append(fileIO.getUInt8(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(numberOfContoursEndPos)))
-                instructionsEndPos = glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(numberOfContoursEndPos)
-            }
-            self.numberOfFlags = Int(endPtsOfContours[endPtsOfContours.count - 1]) + 1
-            var flags: [UInt8] = []
-            for j: Int16 in 0..<Int16(self.numberOfFlags) {
-                flags.append(fileIO.getUInt8(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(instructionsEndPos)))
-                flagsEndPos = glyfTableOffset + glyphOffset + 10 + UInt32(j)*8 + UInt32(instructionsEndPos)
-            }
-            var xCoordinates: [Int] = []
-            let xCoordinatesLength: Int = self.numberOfFlags
-            for j: Int16 in 0..<Int16(xCoordinatesLength) {
-                xCoordinates.append(Int(fileIO.getUInt8(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(flagsEndPos))))
-                xCoordinatesEndPos = glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(flagsEndPos)
-            }
-            var yCoordinates: [Int] = []
-            let yCoordinatesLength: Int = xCoordinatesLength
-            for j: Int16 in 0..<Int16(yCoordinatesLength) {
-                yCoordinates.append(Int(fileIO.getUInt8(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(xCoordinatesEndPos))))
-            }
+            let instructionLength: Int = 0
+            let instructions: [UInt8] = []
+            let flags: [UInt8] = []
+            let xCoordinates: [Int] = []
+            let yCoordinates: [Int] = []
 
             self.glyfs.append(Glyf(
                 numberOfContours: numberOfContours,
