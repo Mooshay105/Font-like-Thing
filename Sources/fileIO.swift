@@ -87,6 +87,17 @@ class FileIO {
     }
     /*
 
+    Takes in rawData and a loaction and returns the UInt8 at the location.
+    In, rawData: Data
+    In, location: UInt32
+    Out: UInt8
+
+    */
+    func getUInt8(rawData: Data, at location: UInt32) -> UInt8 {
+        return rawData.subdata(in: Int(location)..<Int(location) + 1).withUnsafeBytes { $0.load(as: UInt8.self) }.bigEndian
+    }
+    /*
+
     Takes in rawData and a loaction and returns the UInt16 at the location.
     In, rawData: Data
     In, location: UInt32
@@ -117,6 +128,17 @@ class FileIO {
     */
     func getUInt64(rawData: Data, at location: UInt32) -> UInt64 {
         return rawData.subdata(in: Int(location)..<Int(location) + 8).withUnsafeBytes { $0.load(as: UInt64.self) }.bigEndian
+    }
+    /*
+
+    Takes in rawData and a loaction and returns the Int8 at the location.
+    In, rawData: Data
+    In, location: UInt32    
+    Out: Int8
+    
+    */
+    func getInt8(rawData: Data, at location: UInt32) -> Int8 {
+        return rawData.subdata(in: Int(location)..<Int(location) + 1).withUnsafeBytes { $0.load(as: Int8.self) }.bigEndian
     }
     /*
 
@@ -151,6 +173,7 @@ class FileIO {
     func getInt64(rawData: Data, at location: UInt32) -> Int64 {
         return rawData.subdata(in: Int(location)..<Int(location) + 8).withUnsafeBytes { $0.load(as: Int64.self) }.bigEndian
     }
+
     /*
 
     CREDIT: https://github.com/SebLague/Text-Rendering/blob/main/Assets/Scripts/SebText/Loader/FontParser.cs#L549
