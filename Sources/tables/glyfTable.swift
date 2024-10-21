@@ -8,7 +8,7 @@ class glyfTable {
         var xMax: Int16
         var yMax: Int16
         var endPtsOfContours: [UInt16]
-        var instructionLength: Int
+        var instructionLength: UInt16
         var instructions: [UInt8]
         var flags: [UInt8]
         var xCoordinates: [Int]
@@ -29,7 +29,7 @@ class glyfTable {
         self.glyfs = []
 
         for i: UInt16 in 0..<numberOfGlyphs {
-            print("IT RAN")
+            var endPtsOfContoursEndPos: UInt32 = 0
             let glyphOffset: UInt32 = locaTable.getOffsetLong(id: Int(i))
             let numberOfContours: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset)
             if numberOfContours <= 0 {
@@ -43,8 +43,9 @@ class glyfTable {
             var endPtsOfContours: [UInt16] = []
             for j: Int16 in 0..<numberOfContours {
                 endPtsOfContours.append(fileIO.getUInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j)*2))
+                endPtsOfContoursEndPos = glyfTableOffset + glyphOffset + 10 + UInt32(j)*2
             }
-            let instructionLength: Int = 0
+            let instructionLength: UInt16 = fileIO.getUInt16(rawData: rawData, at: endPtsOfContoursEndPos)
             let instructions: [UInt8] = []
             let flags: [UInt8] = []
             let xCoordinates: [Int] = []
