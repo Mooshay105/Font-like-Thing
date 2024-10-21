@@ -22,15 +22,20 @@ class glyfTable {
     init(rawData: Data) {
         let fontHeader: FontHeader = FontHeader(rawData: rawData)
         let locaTable: locaTable = locaTable(rawData: rawData)
+        let maxpTable: maxpTable = maxpTable(rawData: rawData)
         let fileIO: FileIO = FileIO()
         let glyfTableOffset: UInt32 = fontHeader.findTableOffset(forTag: "glyf")
-
+        let numberOfGlyphs: UInt16 = maxpTable.getNumGlyphs()
         self.glyfs = []
 
-        for i: UInt16 in 0..<1 {
+        for i: UInt16 in 0..<numberOfGlyphs {
+            print("IT RAN")
             let glyphOffset: UInt32 = locaTable.getOffsetLong(id: Int(i))
-
             let numberOfContours: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset)
+            if numberOfContours <= 0 {
+                print("Thats a compound glyph ya numpty!!!")
+                continue
+            }
             let xMin: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 2)
             let yMin: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 4)
             let xMax: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 6)
