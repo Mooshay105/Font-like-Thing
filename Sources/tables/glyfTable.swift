@@ -72,18 +72,18 @@ class glyfTable {
             var flags: [UInt8] = []
             for j: Int16 in 0..<Int16(self.numberOfFlags) {
                 flags.append(fileIO.getUInt8(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(instructionsEndPos)))
-                flagsEndPos = glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(instructionsEndPos)
+                flagsEndPos = glyfTableOffset + glyphOffset + 10 + UInt32(j)*8 + UInt32(instructionsEndPos)
             }
             var xCoordinates: [Int] = []
             let xCoordinatesLength: Int = self.numberOfFlags
             for j: Int16 in 0..<Int16(xCoordinatesLength) {
-                xCoordinates.append(Int(fileIO.getUInt32(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(flagsEndPos))))
+                xCoordinates.append(Int(fileIO.getUInt8(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(flagsEndPos))))
                 xCoordinatesEndPos = glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(flagsEndPos)
             }
             var yCoordinates: [Int] = []
             let yCoordinatesLength: Int = xCoordinatesLength
             for j: Int16 in 0..<Int16(yCoordinatesLength) {
-                yCoordinates.append(Int(fileIO.getUInt32(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(xCoordinatesEndPos))))
+                yCoordinates.append(Int(fileIO.getUInt8(rawData: rawData, at: glyfTableOffset + glyphOffset + 10 + UInt32(j) + UInt32(xCoordinatesEndPos))))
             }
 
             self.glyfs.append(Glyf(
