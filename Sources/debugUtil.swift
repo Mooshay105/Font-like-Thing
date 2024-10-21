@@ -145,7 +145,7 @@ class debug {
         print(" ")
         print(" ")
         let glyfTable: glyfTable = glyfTable(rawData: DATA)
-        let i: Int = 1
+        let i: Int = 0
         print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Number Of Glyphs: \(glyfTable.getGlyfs().count)")
         print(" ")
         print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Number Of Contours: \(glyfTable.getGlyfs()[i].numberOfContours)")
