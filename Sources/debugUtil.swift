@@ -153,7 +153,7 @@ class debug {
         print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Instructions: \(glyfTable.getGlyfs()[i].instructions)")
         for j: Int in 0..<glyfTable.getGlyfs()[i].flags.count {
             let glyfIntFlags: [Int] = fileIO.bitsToArrayUInt8(value: glyfTable.getGlyfs()[i].flags[j])
-            print("\u{001B}[0;32m✔\u{001B}[0;37m  glyf Table Flags: \(glyfIntFlags)")
+            print("\u{001B}[0;33m✔\u{001B}[0;37m  glyf Table Flags: \(glyfIntFlags)")
         }
         print("\u{001B}[0;33m?\u{001B}[0;37m  glyf Table X Coordinates: \(glyfTable.getGlyfs()[i].xCoordinates)")
         print("\u{001B}[0;33m?\u{001B}[0;37m  glyf Table Y Coordinates: \(glyfTable.getGlyfs()[i].yCoordinates)")
