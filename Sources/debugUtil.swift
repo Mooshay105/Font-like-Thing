@@ -2,12 +2,7 @@ import Foundation
 
 class debug {
     func debug() throws {
-        // let filePath: String = "ComicNeue-Bold.ttf"
-        // let filePath: String = "ComicNeue-BoldItalic.ttf"
         // let filePath: String = "ComicNeue-Italic.ttf"
-        // let filePath: String = "ComicNeue-Light.ttf"
-        // let filePath: String = "ComicNeue-LightItalic.ttf"
-        // let filePath: String = "ComicNeue-Regular.ttf"
         let filePath: String = "JetBrainsMono-Bold.ttf"
         let fileIO: FileIO = FileIO()
         let DATA: Data = try fileIO.getRawData(filePath: filePath)
