@@ -1,31 +1,5 @@
 import Foundation
 
-/*
-    Expected Tables:
-     - 'cmap' 	character to glyph mapping
-     - 'glyf' 	glyph data
-     - 'head' 	font header
-     - 'hhea' 	horizontal header
-     - 'hmtx' 	horizontal metrics
-     - 'loca' 	index to location
-     - 'maxp' 	maximum profile
-     - 'name' 	naming
-     - 'post' 	PostScript
-    
-    Block 1:
-    uint32 	scaler type 	A tag to indicate the OFA scaler to be used to rasterize this font; see the note on the scaler type below for more information.
-    uint16 	numTables 	    number of tables
-    uint16 	searchRange 	(maximum power of 2 <= numTables) * 16
-    uint16 	entrySelector 	log2(maximum power of 2 <= numTables)
-    uint16 	rangeShift 	    numTables * 16 - searchRange
-
-    Block 2:
-    uint32 	tag 	        4-byte identifier (e.g. "name")
-    uint32 	checkSum 	    checksum for this table (to detect corruption)
-    uint32 	offset 	        offset from beginning of sfnt (byte offset from beginning of file)
-    uint32 	length 	        length of this table in byte (actual length not padded length) (e.g. 12 for "name" table)
-*/
-
 class FontHeader {
     var scalerType: UInt32
     var numTables: UInt16
@@ -51,10 +25,9 @@ class FontHeader {
 
     func findTableOffset(forTag tableTag: String) -> UInt32 {
         var tagValue: UInt32 = 0
-        for character in tableTag.utf8 {
+        for character: String.UTF8View.Element in tableTag.utf8 {
             tagValue = (tagValue << 8) | UInt32(character)
         }
-
         for i: UInt16 in 0..<self.numTables {
             if self.tag[Int(i)] == tagValue {
                 return self.offset[Int(i)]
@@ -64,11 +37,12 @@ class FontHeader {
     }
 
     init(rawData: Data) {
-        self.scalerType = rawData.subdata(in: 0..<4).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian
-        self.numTables = rawData.subdata(in: 4..<6).withUnsafeBytes { $0.load(as: UInt16.self) }.bigEndian
-        self.searchRange = rawData.subdata(in: 6..<8).withUnsafeBytes { $0.load(as: UInt16.self) }.bigEndian
-        self.entrySelector = rawData.subdata(in: 8..<10).withUnsafeBytes { $0.load(as: UInt16.self) }.bigEndian
-        self.rangeShift = rawData.subdata(in: 10..<12).withUnsafeBytes { $0.load(as: UInt16.self) }.bigEndian
+        let fileIO: FileIO = FileIO()
+        self.scalerType = fileIO.getUInt32(rawData: rawData, at: 0)
+        self.numTables = fileIO.getUInt16(rawData: rawData, at: 4)
+        self.searchRange = fileIO.getUInt16(rawData: rawData, at: 6)
+        self.entrySelector = fileIO.getUInt16(rawData: rawData, at: 8)
+        self.rangeShift = fileIO.getUInt16(rawData: rawData, at: 10)
         self.tag = []
         self.checkSum = []
         self.offset = []
@@ -77,15 +51,11 @@ class FontHeader {
         // Get the table data.
         for i: UInt16 in 0..<self.numTables {
             let tagIndex: Int = 12 + Int(i) * 16
-            self.tag.append(rawData.subdata(in: tagIndex..<tagIndex + 4).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
-            self.checkSum.append(rawData.subdata(in: tagIndex + 4..<tagIndex + 8).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
-            self.offset.append(rawData.subdata(in: tagIndex + 8..<tagIndex + 12).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
-            self.length.append(rawData.subdata(in: tagIndex + 12..<tagIndex + 16).withUnsafeBytes { $0.load(as: UInt32.self) }.bigEndian)
-
-            // Only run on last iteration.
-            if i == self.numTables - 1 {
-                self.endOfHeaderLocation = UInt32(tagIndex + 16)
-            }
+            self.tag.append(fileIO.getUInt32(rawData: rawData, at: UInt32(tagIndex)))
+            self.checkSum.append(fileIO.getUInt32(rawData: rawData, at: UInt32(tagIndex + 4)))
+            self.offset.append(fileIO.getUInt32(rawData: rawData, at: UInt32(tagIndex + 8)))
+            self.length.append(fileIO.getUInt32(rawData: rawData, at: UInt32(tagIndex + 12)))
+            self.endOfHeaderLocation = UInt32(tagIndex + 16)
         }
     }
 }

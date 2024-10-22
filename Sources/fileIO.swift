@@ -1,9 +1,6 @@
 import Foundation
 
 class FileIO {
-    enum FileIOError: Error {
-        case invalidLocation
-    }
     /*
 
     Takes in a file path and returns the raw data of the file.
@@ -37,23 +34,6 @@ class FileIO {
     func convertUInt16ToASCII(value: UInt16) -> String {
         let bytes: [UnsafeRawBufferPointer.Element] = withUnsafeBytes(of: value.bigEndian, Array.init)
         return String(bytes: bytes, encoding: .ascii) ?? ""
-    }
-    /*
-
-    Takes in data and a location and returns the byte at that location.
-    In, data: Data
-    In, location: UInt32
-    Out: Data?
-
-    WARN: Will throw `FileIOError.invalidLocation` if the location is out of bounds.
-
-    */
-    func getByte(data: Data, at location: UInt32) throws -> Data? {
-        guard location < data.count else {
-            throw FileIOError.invalidLocation
-        }
-    
-        return Data([data[Int(location)]])
     }
     /*
 
@@ -172,19 +152,6 @@ class FileIO {
     */
     func getInt64(rawData: Data, at location: UInt32) -> Int64 {
         return rawData.subdata(in: Int(location)..<Int(location) + 8).withUnsafeBytes { $0.load(as: Int64.self) }.bigEndian
-    }
-
-    /*
-
-    CREDIT: https://github.com/SebLague/Text-Rendering/blob/main/Assets/Scripts/SebText/Loader/FontParser.cs#L549
-    Takes in a UInt8 and returns `1` if the bit at the index is set.
-    In, flag: UInt8
-    In, bitIndex: Int
-    Out: Bool
-
-    */
-    func isFlagBitSet(flag: UInt8, bitIndex: Int) -> Bool {
-        return ((flag >> bitIndex) & 1) == 1;
     }
     /*
 

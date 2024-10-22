@@ -7,7 +7,7 @@ class cmapTable {
     var platformSpecificID: [UInt16]
     var offset: [UInt32]
 
-    // NOTE: The unicodeIndex is the table number of the unicode table.
+    // NOTE: The unicodeIndex is the table index of the unicode table.
     var numberOfUnicodeTables: UInt16
     var unicodeIndex: [UInt16]
     var cmapTableOffset: UInt32
@@ -18,25 +18,6 @@ class cmapTable {
     func getPlatformSpecificID(id i: Int) -> UInt16 { return self.platformSpecificID[i] }
     func getOffset(id i: Int) -> UInt32 { return self.offset[i] }
     func getUnicodeIndex(id i: Int) -> UInt16 { return self.unicodeIndex[i] }
-
-    /*
-
-    Takes in a unicode value and returns the glyph index.
-    In: UInt32
-    out: UInt16
-
-    */
-
-    func unicodeToGlyphIndex(unicode: UInt32) -> UInt16 {
-        for i: UInt16 in 0..<self.numberOfUnicodeTables {
-            let offset: UInt32 = self.offset[Int(i)]
-            let length: UInt32 = self.offset[Int(i) + 1] - offset
-            if offset <= unicode && unicode < offset + length {
-                return UInt16(i + 1)
-            }
-        }
-        return 0
-    }
 
     init(rawData: Data) {
         let FontHeader: FontHeader = FontHeader(rawData: rawData)

@@ -37,7 +37,7 @@ class glyfTable {
             let glyphOffset: UInt32 = locaTable.getOffsetLong(id: Int(i))
             let numberOfContours: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset)
             if numberOfContours <= 0 {
-                print("Thats a compound glyph ya numpty!!!")
+                print("Thats A Compound glyph, We Do Not Support That Yet!")
                 continue
             }
             let xMin: Int16 = fileIO.getInt16(rawData: rawData, at: glyfTableOffset + glyphOffset + 2)
