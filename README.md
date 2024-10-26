@@ -1,8 +1,10 @@
+# NOTE: This is not a finished project, DO NOT USE!!!
+
 # Font-like Thing
 
 Inspired by Sebastian Lague's `Text-Rendering` project
 
-## Documentation
+## Documentation (Not Done)
 
 The font header is split into two blocks.
 
